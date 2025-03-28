@@ -71,9 +71,10 @@
         // 🛠️ Replace with your Dropbox direct link (change ?dl=0 to ?raw=1)
         const pdfUrl = '1. All I Have to Do Is Dream.pdf';
         const container = document.getElementById('pdf-container');
-        let autoScrollSpeed = 1; // Default speed
         let scrollInterval;
         let scrolling = true;
+        let autoScrollSpeed = 1; // Default speed
+        let scrollStep = 2; // Default step
 
         async function renderPDF(pdfUrl) {
             try {
@@ -104,9 +105,9 @@
             if (scrollInterval) clearInterval(scrollInterval);
             scrollInterval = setInterval(() => {
                 if (scrolling && container.scrollTop + container.clientHeight < container.scrollHeight) {
-                    container.scrollTop += autoScrollSpeed;
+                    container.scrollTop += scrollStep;
                 }
-            }, 50);
+            }, 50 / autoScrollSpeed); // Adjust interval dynamically based on speed
         }
 
         function toggleScrolling() {
@@ -121,6 +122,7 @@
 
         function changeSpeed(value) {
             autoScrollSpeed = parseFloat(value);
+            scrollStep = autoScrollSpeed * 2; // Scale step size dynamically
             document.getElementById('speedValue').innerText = `${value}x`;
             if (scrolling) startAutoScroll(); // Restart scrolling with new speed
         }
@@ -130,3 +132,4 @@
 
 </body>
 </html>
+
