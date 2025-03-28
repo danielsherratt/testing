@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Scrolling PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        #pdf-container {
+            width: 80%;
+            height: 80vh;
+            overflow-y: auto;
+            background: white;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        canvas {
+            display: block;
+            margin: 10px auto;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Auto Scrolling PDF Viewer</h2>
+    <button onclick="toggleScrolling()">Pause/Resume Scroll</button>
+    <div id="pdf-container"></div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        // 🛠️ Replace FILE_ID with your Google Drive file ID
+        const pdfUrl = 'https://www.dropbox.com/s/uki152qx6tsj1s58h91d6/1.-All-I-Have-to-Do-Is-Dream.pdf.pdf?raw=1';
+        const container = document.getElementById('pdf-container');
+        let autoScrollSpeed = 1; // Speed of scrolling
+        let scrollInterval;
+        let scrolling = true;
+
+        async function renderPDF(pdfUrl) {
+            try {
+                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                const pdf = await loadingTask.promise;
+
+                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                    const page = await pdf.getPage(pageNum);
+                    const canvas = document.createElement('canvas');
+                    container.appendChild(canvas);
+                    const context = canvas.getContext('2d');
+                    const viewport = page.getViewport({ scale: 1.5 });
+
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+
+                    await page.render({ canvasContext: context, viewport }).promise;
+                }
+
+                startAutoScroll();
+            } catch (error) {
+                console.error("❌ Error loading PDF:", error);
+                container.innerHTML = "<p style='color: red;'>⚠️ Failed to load PDF. Please check the file path.</p>";
+            }
+        }
+
+        function startAutoScroll() {
+            if (scrollInterval) clearInterval(scrollInterval);
+            scrollInterval = setInterval(() => {
+                if (scrolling && container.scrollTop + container.clientHeight < container.scrollHeight) {
+                    container.scrollTop += autoScrollSpeed;
+                }
+            }, 50);
+        }
+
+        function toggleScrolling() {
+            scrolling = !scrolling;
+            if (scrolling) startAutoScroll();
+        }
+
+        renderPDF(pdfUrl);
+    </script>
+
+</body>
+</html>
