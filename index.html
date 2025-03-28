@@ -1,3 +1,7 @@
+<!--
+1. All I Have to Do Is Dream.pdf
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,6 +122,7 @@
         function changeSpeed(value) {
             autoScrollSpeed = parseFloat(value);
             document.getElementById('speedValue').innerText = `${value}x`;
+            if (scrolling) startAutoScroll(); // Restart scrolling with new speed
         }
 
         renderPDF(pdfUrl);
