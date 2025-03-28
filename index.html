@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,26 +25,49 @@
             display: block;
             margin: 10px auto;
         }
+        .controls {
+            margin: 10px 0;
+        }
         button {
             padding: 10px 15px;
             font-size: 16px;
-            margin: 5px;
             cursor: pointer;
+            border: none;
+            background: #007BFF;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .speed-slider {
+            margin-left: 10px;
+        }
+        label {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <h2>Auto Scrolling PDF Viewer</h2>
-    <button onclick="toggleScrolling()">Pause/Resume Scroll</button>
+    
+    <div class="controls">
+        <button id="playPauseButton" onclick="toggleScrolling()">▶️</button>
+        <label for="speed">Speed:</label>
+        <input type="range" id="speed" class="speed-slider" min="0.25" max="1.5" step="0.25" value="1" onchange="changeSpeed(this.value)">
+        <span id="speedValue">1x</span>
+    </div>
+
     <div id="pdf-container"></div>
 
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-        // 🛠️ Replace FILE_ID with your Google Drive file ID
+
+        // 🛠️ Replace with your Dropbox direct link (change ?dl=0 to ?raw=1)
         const pdfUrl = '1. All I Have to Do Is Dream.pdf';
         const container = document.getElementById('pdf-container');
-        let autoScrollSpeed = 1; // Speed of scrolling
+        let autoScrollSpeed = 1; // Default speed
         let scrollInterval;
         let scrolling = true;
 
@@ -85,7 +107,17 @@
 
         function toggleScrolling() {
             scrolling = !scrolling;
-            if (scrolling) startAutoScroll();
+            document.getElementById('playPauseButton').innerText = scrolling ? '⏸️' : '▶️';
+            if (scrolling) {
+                startAutoScroll();
+            } else {
+                clearInterval(scrollInterval);
+            }
+        }
+
+        function changeSpeed(value) {
+            autoScrollSpeed = parseFloat(value);
+            document.getElementById('speedValue').innerText = `${value}x`;
         }
 
         renderPDF(pdfUrl);
