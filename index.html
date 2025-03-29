@@ -93,9 +93,9 @@
         let scrollInterval;
         let scrolling = true;
         let autoScrollSpeed = 0.5; // Default speed
-        let scrollStep = 2; // Default step
+        let scrollStep = autoScrollSpeed * 2; // Adjusted based on speed
 
-       async function renderPDF(pdfUrl) {
+    async function renderPDF(pdfUrl) {
     try {
         const loadingTask = pdfjsLib.getDocument(pdfUrl);
         const pdf = await loadingTask.promise;
@@ -113,8 +113,8 @@
             await page.render({ canvasContext: context, viewport }).promise;
         }
 
-        // Set initial speed to match the slider default
-        changeSpeed(document.getElementById("speed").value);
+        // ✅ Ensure the correct speed is set before starting scroll
+        changeSpeed(0.5); // Match the slider default
         startAutoScroll();
     } catch (error) {
         console.error("❌ Error loading PDF:", error);
