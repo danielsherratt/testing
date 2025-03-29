@@ -62,7 +62,14 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        const pdfUrl = '1. All I Have to Do Is Dream.pdf';
+function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+const defaultPdf = "1. All I Have to Do Is Dream.pdf"; // Default PDF
+const pdfUrl = getQueryParam("file") || defaultPdf; // Load from URL if available
+
         const container = document.getElementById('pdf-container');
         let scrollInterval;
         let scrolling = true;
