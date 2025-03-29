@@ -95,7 +95,7 @@
         let autoScrollSpeed = 0.5; // Default speed
         let scrollStep = 2; // Default step
 
-        async function renderPDF(pdfUrl) {
+       async function renderPDF(pdfUrl) {
     try {
         const loadingTask = pdfjsLib.getDocument(pdfUrl);
         const pdf = await loadingTask.promise;
@@ -113,7 +113,7 @@
             await page.render({ canvasContext: context, viewport }).promise;
         }
 
-        // Ensure the correct speed is set before starting scroll
+        // Set initial speed to match the slider default
         changeSpeed(document.getElementById("speed").value);
         startAutoScroll();
     } catch (error) {
@@ -121,7 +121,6 @@
         container.innerHTML = "<p style='color: red;'>⚠️ Failed to load PDF. Please check the file path.</p>";
     }
 }
-
 
 function startAutoScroll() {
     if (scrollInterval) clearInterval(scrollInterval);
