@@ -76,38 +76,43 @@
         let scrollStep = 2; // Default step
 
         async function renderPDF(pdfUrl) {
-            try {
-                const loadingTask = pdfjsLib.getDocument(pdfUrl);
-                const pdf = await loadingTask.promise;
+    try {
+        const loadingTask = pdfjsLib.getDocument(pdfUrl);
+        const pdf = await loadingTask.promise;
 
-                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                    const page = await pdf.getPage(pageNum);
-                    const canvas = document.createElement('canvas');
-                    container.appendChild(canvas);
-                    const context = canvas.getContext('2d');
-                    const viewport = page.getViewport({ scale: 1 });
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const canvas = document.createElement('canvas');
+            container.appendChild(canvas);
+            const context = canvas.getContext('2d');
+            const viewport = page.getViewport({ scale: 1 });
 
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
 
-                    await page.render({ canvasContext: context, viewport }).promise;
-                }
-
-                startAutoScroll();
-            } catch (error) {
-                console.error("❌ Error loading PDF:", error);
-                container.innerHTML = "<p style='color: red;'>⚠️ Failed to load PDF. Please check the file path.</p>";
-            }
+            await page.render({ canvasContext: context, viewport }).promise;
         }
+
+        // Ensure the correct speed is set before starting scroll
+        changeSpeed(document.getElementById("speed").value);
+        startAutoScroll();
+    } catch (error) {
+        console.error("❌ Error loading PDF:", error);
+        container.innerHTML = "<p style='color: red;'>⚠️ Failed to load PDF. Please check the file path.</p>";
+    }
+}
+
 
         function startAutoScroll() {
-            if (scrollInterval) clearInterval(scrollInterval);
-            scrollInterval = setInterval(() => {
-                if (scrolling && container.scrollTop + container.clientHeight < container.scrollHeight) {
-                    container.scrollTop += scrollStep;
-                }
-            }, 50 / autoScrollSpeed); // Adjust interval dynamically based on speed
+    if (scrollInterval) clearInterval(scrollInterval);
+    scrollStep = autoScrollSpeed * 2; // Ensure step size is set
+    scrollInterval = setInterval(() => {
+        if (scrolling && container.scrollTop + container.clientHeight < container.scrollHeight) {
+            container.scrollTop += scrollStep;
         }
+    }, 50);
+}
+
 
         function toggleScrolling() {
             scrolling = !scrolling;
