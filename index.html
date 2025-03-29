@@ -103,15 +103,15 @@
 }
 
 
-        function startAutoScroll() {
+function startAutoScroll() {
     if (scrollInterval) clearInterval(scrollInterval);
-    scrollStep = autoScrollSpeed * 2; // Ensure step size is set
     scrollInterval = setInterval(() => {
         if (scrolling && container.scrollTop + container.clientHeight < container.scrollHeight) {
             container.scrollTop += scrollStep;
         }
     }, 50);
 }
+
 
 
         function toggleScrolling() {
@@ -124,12 +124,14 @@
             }
         }
 
-        function changeSpeed(value) {
-            autoScrollSpeed = parseFloat(value);
-            scrollStep = autoScrollSpeed * 2; // Scale step size dynamically
-            document.getElementById('speedValue').innerText = `${value}x`;
-            if (scrolling) startAutoScroll(); // Restart scrolling with new speed
-        }
+ function changeSpeed(value) {
+    autoScrollSpeed = parseFloat(value);
+    scrollStep = Math.max(autoScrollSpeed * 2, 1); // Ensure a minimum scroll step of 1
+    document.getElementById('speedValue').innerText = `${value}x`;
+    
+    if (scrolling) startAutoScroll(); // Restart scrolling with new speed
+}
+
 
         renderPDF(pdfUrl);
     </script>
