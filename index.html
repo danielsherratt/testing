@@ -124,13 +124,17 @@ function startAutoScroll() {
             }
         }
 
- function changeSpeed(value) {
+function changeSpeed(value) {
     autoScrollSpeed = parseFloat(value);
-    scrollStep = Math.max(autoScrollSpeed * 2, 1); // Ensure a minimum scroll step of 1
-    document.getElementById('speedValue').innerText = `${value}x`;
     
+    // Use a non-linear scaling for better speed differences
+    scrollStep = Math.max((autoScrollSpeed ** 2) * 10, 1); // Quadratic scaling
+
+    document.getElementById('speedValue').innerText = `${value}x`;
+
     if (scrolling) startAutoScroll(); // Restart scrolling with new speed
 }
+
 
 
         renderPDF(pdfUrl);
