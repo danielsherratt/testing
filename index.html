@@ -124,13 +124,16 @@
 
 function startAutoScroll() {
     if (scrollInterval) clearInterval(scrollInterval);
+    
+    let intervalTime = 100 / autoScrollSpeed; // Adjust interval timing for smoother scrolling
 
     scrollInterval = setInterval(() => {
         if (scrolling && container.scrollTop + container.clientHeight < container.scrollHeight) {
             container.scrollTop += scrollStep;
         }
-    }, 50);
+    }, Math.min(intervalTime, 200)); // Ensure interval doesn't get too fast
 }
+
 
 
 
