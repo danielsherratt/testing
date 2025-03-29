@@ -66,9 +66,11 @@ function getQueryParam(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 }
+const pdfFolder = "pdfs/"; // Folder where the PDFs are stored
 
 const defaultPdf = "1. All I Have to Do Is Dream.pdf"; // Default PDF
-const pdfUrl = getQueryParam("file") || defaultPdf; // Load from URL if available
+const pdfFile = getQueryParam("file") || defaultPdf;
+const pdfUrl = pdfFolder + pdfFile; // Combine folder path and file name
 
         const container = document.getElementById('pdf-container');
         let scrollInterval;
