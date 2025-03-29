@@ -124,14 +124,12 @@
 
 function startAutoScroll() {
     if (scrollInterval) clearInterval(scrollInterval);
-    
-    let intervalTime = 100 / autoScrollSpeed; // Adjust interval timing for smoother scrolling
 
     scrollInterval = setInterval(() => {
         if (scrolling && container.scrollTop + container.clientHeight < container.scrollHeight) {
             container.scrollTop += scrollStep;
         }
-    }, Math.min(intervalTime, 200)); // Ensure interval doesn't get too fast
+    }, 50);
 }
 
 
@@ -149,14 +147,13 @@ function startAutoScroll() {
 
 function changeSpeed(value) {
     autoScrollSpeed = parseFloat(value);
-    
-    // Use a more gradual scaling factor
-    scrollStep = Math.max(autoScrollSpeed * 1.5, 0.5); // Keep step slow, minimum 0.5
+    scrollStep = Math.max(autoScrollSpeed * 2, 1); // Ensure a minimum step of 1 pixel
 
     document.getElementById('speedValue').innerText = `${value}x`;
 
     if (scrolling) startAutoScroll(); // Restart scrolling with new speed
 }
+
 
  function checkOrientation() {
         if (window.innerHeight > window.innerWidth) {
