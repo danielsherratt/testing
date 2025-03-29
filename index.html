@@ -50,9 +50,29 @@
         label {
             font-weight: bold;
         }
+
+          /* Fullscreen overlay for portrait mode */
+    #rotate-message {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        color: white;
+        font-size: 24px;
+        text-align: center;
+        padding-top: 40vh;
+        z-index: 9999;
+    }
+        
     </style>
 </head>
 <body>
+
+    
+<div id="rotate-message">📱 Please rotate your device to landscape mode 🔄</div>
 
     
     <div class="controls">
@@ -139,7 +159,19 @@ function changeSpeed(value) {
     if (scrolling) startAutoScroll(); // Restart scrolling with new speed
 }
 
+ function checkOrientation() {
+        if (window.innerHeight > window.innerWidth) {
+            // Show the "rotate device" message in portrait mode
+            document.getElementById("rotate-message").style.display = "block";
+        } else {
+            // Hide the message in landscape mode
+            document.getElementById("rotate-message").style.display = "none";
+        }
+    }
 
+    // Run on load and when the screen resizes
+    window.addEventListener("load", checkOrientation);
+    window.addEventListener("resize", checkOrientation);
 
 
         renderPDF(pdfUrl);
